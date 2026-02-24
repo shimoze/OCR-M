@@ -1,0 +1,2 @@
+OCR_LANG= "ru"
+MIN_CONFIDENCE= 0.6
