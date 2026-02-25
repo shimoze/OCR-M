@@ -33,6 +33,16 @@ class TextNormalizer:
         if not self.corrector:
             return text
         
-        words = text.split()
-        corrected = [self.corrector.correct_word(w) for w in words]
-        return " ".join(corrected)
+        tokens = re.findall(r'\w+|[^\w\s]', text, re.UNICODE)
+        corrected_tokens = []
+
+        for token in tokens:
+            if token.isalpha(): # Если это слово (буквы)
+                # Исправляем только если слово "подозрительное" 
+                # (например, содержит смесь латиницы и кириллицы или его нет в словаре)
+                corrected_tokens.append(self.corrector.correct_word(token))
+            else:
+                corrected_tokens.append(token)
+        
+        # Склеиваем обратно, пытаясь сохранить пробелы (упрощенно)
+        return " ".join(corrected_tokens).replace(" ,", ",").replace(" .", ".")

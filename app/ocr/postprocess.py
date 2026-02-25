@@ -21,9 +21,6 @@ def postprocess(text, score, box, normalizer):
     if filter_by_score(text, score) is None:
         return None
 
-    if not filter_by_score(box):
-        return None
-
     text = filter_noise(text)
 
     if text is None:

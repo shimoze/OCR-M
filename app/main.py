@@ -6,7 +6,7 @@ from ocr.layout import sort_boxes, group_lines
 from ocr.text.normalizer import TextNormalizer
 from ocr.text.dictionary_loader import load_dictionary
 
-from utils.paths import RAW_DIR
+from utils.paths import RAW_DIR, PROCESSED_DIR
 
 my_dict = load_dictionary("russian.txt")
 normalizer = TextNormalizer(dictionary=my_dict)
@@ -24,7 +24,7 @@ if img is None:
 
 ocr = init_ocr()
 
-print("Начинаю распознование...")
+print("Начинаю распознавание...")
 results = run_ocr(ocr, img)
 
 all_pairs = []
@@ -42,7 +42,11 @@ lines = group_lines(pairs_sorted)
 for line in lines:
     print(line)
 
+PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+
+output_file = PROCESSED_DIR / "output.txt"
+
 #Вывод текста в файл
-with open("output.txt", "w", encoding="utf-8") as f:
+with open(output_file, "w", encoding="utf-8") as f:
     for line in lines:
         print(line, file=f)
