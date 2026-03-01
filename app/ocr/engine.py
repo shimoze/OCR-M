@@ -1,6 +1,7 @@
 from paddleocr import PaddleOCR
+from .preprocessing import soft_preprocess
 
-def init_ocr(lang='ru', use_orientation=True, show_log=False):
+def init_ocr(lang='cyrillic', use_orientation=True, show_log=False):
     return PaddleOCR(
         use_angle_cls = use_orientation,
         lang=lang,
@@ -11,5 +12,10 @@ def init_ocr(lang='ru', use_orientation=True, show_log=False):
         use_gpu= False,
     )
 
-def run_ocr(ocr, image):
+def run_ocr(ocr, image, preprocess=True):
+    if isinstance(image, str) and preprocess:
+        img = soft_preprocess(image)
+    else:
+        img = image
+    
     return ocr.ocr(image, cls=False)

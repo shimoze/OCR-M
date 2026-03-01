@@ -11,7 +11,7 @@ class TextNormalizer:
         text = self._normalize_chars(text)
         text = self._fix_line_breaks(text)
         text = self._normalize_spaces(text)
-        text = self._correct_spelling(text)
+        #text = self._correct_spelling(text)
         return text
     
     # 1. Замена латиницы
@@ -29,7 +29,7 @@ class TextNormalizer:
         return re.sub(r"\s+", " ", text).strip()
     
     # 4. Исправление слов
-    def _correct_spelling(self, text: str) -> str:
+    """def _correct_spelling(self, text: str) -> str:
         if not self.corrector:
             return text
         
@@ -46,3 +46,4 @@ class TextNormalizer:
         
         # Склеиваем обратно, пытаясь сохранить пробелы (упрощенно)
         return " ".join(corrected_tokens).replace(" ,", ",").replace(" .", ".")
+        """
