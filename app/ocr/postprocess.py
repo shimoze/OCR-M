@@ -1,4 +1,4 @@
-from ocr.text.normalizer import TextNormalizer
+from text.normalizer import TextNormalizer
 
 #Фильтр по confidence
 def filter_by_score(text, score, min_score=0.6):
