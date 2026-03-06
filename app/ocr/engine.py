@@ -1,4 +1,5 @@
 from paddleocr import PaddleOCR
+
 from .preprocessing import soft_preprocess
 
 def init_ocr(lang='cyrillic', use_orientation=True, show_log=False):
