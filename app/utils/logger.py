@@ -1,12 +1,12 @@
 import logging
 import time
+from datetime import datetime
 from contextlib import contextmanager
 from .paths import LOG_DIR
 
-LOG_FILE = LOG_DIR / "ocr_module.log"
-
 _step_counter = 0
 _total_steps = 0
+
 
 def setup_logger(total_steps: int):
     global _step_counter, _total_steps
@@ -16,12 +16,17 @@ def setup_logger(total_steps: int):
     _step_counter = 0
     _total_steps = total_steps
 
+    # уникальное имя файла
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    log_file = LOG_DIR / f"ocr_{timestamp}.log"
+
     logger = logging.getLogger("pipeline")
     logger.setLevel(logging.INFO)
 
     logger.handlers.clear()
+    logger.propagate = False
 
-    file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
+    file_handler = logging.FileHandler(log_file, encoding="utf-8")
     console_handler = logging.StreamHandler()
 
     formatter = logging.Formatter("%(message)s")
@@ -47,7 +52,7 @@ def log_step(name: str):
     yield
 
     elapsed = (time.perf_counter() - start) * 1000
-    dots = "." * (20 - len(name))
+    dots = "." * max(1, 20 - len(name))
 
     logger.info(
         "[%d/%d] %s %s %.0f ms",

@@ -18,7 +18,6 @@ img_path = RAW_DIR / "test_image.jpg"
 if not img_path.exists():
     raise FileNotFoundError(f"Файл не найден: {img_path}")
 
-
 with log_step("load image"):
     img = cv2.imread(str(img_path))
 
