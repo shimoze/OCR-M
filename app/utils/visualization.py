@@ -1,13 +1,13 @@
 import cv2
 import os
 import time
-from .paths import DEBUG_DIR
 import numpy
 
 DEBUG = True
 
 class OCRVisualizer:
-    def __init__(self):
+    def __init__(self, steps_dir):
+        self.steps_dir = steps_dir
         self.steps = []
         self.start_times = {}
         self.counter = 0
@@ -18,7 +18,7 @@ class OCRVisualizer:
             return
         
         self.counter += 1
-        filename = DEBUG_DIR / f"{self.counter:03d}_{name}.png"
+        filename = self.steps_dir / f"{self.counter:03d}_{name}.png"
 
         cv2.imwrite(str(filename), image)
         self.steps.append((name, filename))
