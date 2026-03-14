@@ -2,63 +2,57 @@ import logging
 import time
 from datetime import datetime
 from contextlib import contextmanager
-from .paths import LOG_DIR
-
-_step_counter = 0
-_total_steps = 0
 
 
-def setup_logger(total_steps: int):
-    global _step_counter, _total_steps
+class OCRLogger:
+    def __init__(self, log_dir, total_steps):
+        self.log_dir = log_dir
+        self.total_steps = total_steps
+        self.step_counter = 0
+        self.logger = None
+        self.setup()
 
-    LOG_DIR.mkdir(exist_ok=True)
+    def setup(self):
+        self.log_dir.mkdir(exist_ok=True)
+        
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        log_file = self.log_dir / f"ocr_{timestamp}.log"
 
-    _step_counter = 0
-    _total_steps = total_steps
+        logger = logging.getLogger("pipeline")
+        logger.setLevel(logging.INFO)
 
-    # уникальное имя файла
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    log_file = LOG_DIR / f"ocr_{timestamp}.log"
+        logger.handlers.clear()
+        logger.propagate = False
 
-    logger = logging.getLogger("pipeline")
-    logger.setLevel(logging.INFO)
+        file_handler = logging.FileHandler(log_file, encoding="utf-8")        
+        console_handler = logging.StreamHandler()
 
-    logger.handlers.clear()
-    logger.propagate = False
+        formatter = logging.Formatter("%(message)s")
 
-    file_handler = logging.FileHandler(log_file, encoding="utf-8")
-    console_handler = logging.StreamHandler()
+        file_handler.setFormatter(formatter)
+        console_handler.setFormatter(formatter)
 
-    formatter = logging.Formatter("%(message)s")
+        logger.addHandler(file_handler)
+        logger.addHandler(console_handler)
 
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
+        self.logger = logger
 
-    logger.addHandler(file_handler)
-    logger.addHandler(console_handler)
+    @contextmanager
+    def log_step(self, name: str):
 
-    return logger
+        self.step_counter += 1
+        start = time.perf_counter()
 
+        yield
 
-@contextmanager
-def log_step(name: str):
-    global _step_counter
+        elapsed = (time.perf_counter() - start) * 1000
+        dots = "." * max(1, 20 - len(name))
 
-    logger = logging.getLogger("pipeline")
-
-    _step_counter += 1
-    start = time.perf_counter()
-
-    yield
-
-    elapsed = (time.perf_counter() - start) * 1000
-    dots = "." * max(1, 20 - len(name))
-
-    logger.info(
-        "[%d/%d] %s %s %.0f ms",
-        _step_counter,
-        _total_steps,
-        name,
-        dots,
-        elapsed,
-    )
+        self.logger.info(
+            "[%d/%d] %s %s %.0f ms",
+            self.step_counter,
+            self.total_steps,
+            name,
+            dots,
+            elapsed,
+        )
