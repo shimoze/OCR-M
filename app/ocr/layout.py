@@ -7,7 +7,7 @@ def box_height(box):
 
 #Средняя высота строки
 def median_text_height(boxes):
-    heights = [box_height(box) for box, _ in boxes]
+    heights = [box_height(box) for box, _, _ in boxes]
     return statistics.median(heights)
 
 def sort_boxes(boxes):
@@ -16,7 +16,7 @@ def sort_boxes(boxes):
     box: [[x1,y1],[x2,y2],[x3,y3],[x4,y4]]
     """
     def box_key(item):
-        box, _ = item
+        box, _, _ = item
         y = min(p[1] for p in box)
         x = min(p[0] for p in box)
         return (y, x)
@@ -34,31 +34,46 @@ def group_lines(boxes):
     y_threshold = int(median_h * 0.5) # Немного уменьшим порог для точности
 
     lines = []
-    current_line_boxes = []
-    
-    if boxes:
-        # Берем центр первого бокса как эталон для первой строки
-        first_box = boxes[0][0]
-        current_y_center = (min(p[1] for p in first_box) + max(p[1] for p in first_box)) / 2
-        
-        for box, text in boxes:
-            box_y_center = (min(p[1] for p in box) + max(p[1] for p in box)) / 2
-            
-            if abs(box_y_center - current_y_center) <= y_threshold:
-                current_line_boxes.append((box, text))
-            else:
-                # Сортируем накопленную строку по X (слева направо)
-                current_line_boxes.sort(key=lambda b: min(p[0] for p in b[0]))
-                lines.append(" ".join(t for _, t in current_line_boxes))
-                
-                # Переходим к новой строке
-                current_line_boxes = [(box, text)]
-                current_y_center = box_y_center
+    current_line = []
 
-        # Не забываем последнюю строку
-        if current_line_boxes:
-            current_line_boxes.sort(key=lambda b: min(p[0] for p in b[0]))
-            lines.append(" ".join(t for _, t in current_line_boxes))
+    first_box = boxes[0][0]
+    current_y_center = (min(p[1] for p in first_box) + max(p[1] for p in first_box)) / 2
+
+    for box, text, score in boxes:
+
+        box_y_center = (min(p[1] for p in box) + max(p[1] for p in box)) / 2
+
+        if abs(box_y_center - current_y_center) <= y_threshold:
+            current_line.append((box, text, score))
+        else:
+
+            current_line.sort(key=lambda b: min(p[0] for p in b[0]))
+
+            line_text = " ".join(t for _, t, _ in current_line)
+            line_score = sum(s for _, _, s in current_line) / len(current_line)
+            line_box = [p for box, _, _ in current_line for p in box]
+
+            lines.append({
+                "text": line_text,
+                "score":line_score,
+                "box": line_box,
+            })
+
+            current_line = [(box, text, score)]
+            current_y_center = box_y_center
+
+    if current_line:
+        current_line.sort(key=lambda b: min(p[0] for p in b[0]))
+
+        line_text =" ".join(t for _, t, _ in current_line)
+        line_score = sum(s for _, _, s in current_line) / len(current_line)
+        line_box = [p for box, _, _ in current_line for p in box]
+
+        lines.append({
+            "text": line_text,
+            "score": line_score,
+            "box": line_box
+        })
 
     return lines
 
