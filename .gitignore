@@ -2,7 +2,7 @@
 __pycache__/
 *.pyc
 data/*
-logs/*
+debug/*
 
-!logs/.gitkeep
 !data/.gitkeep
+!debug/.gitkeep
