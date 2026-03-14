@@ -1,31 +1,42 @@
 from text.normalizer import TextNormalizer
 
-#Фильтр по confidence
-def filter_by_score(text, score, min_score=0.6):
-    if score < min_score:
-        return None
-    return text
 
-#Фильтр шума
+def filter_by_score(score, min_score=0.6):
+    return score >= min_score
+
+
 def filter_noise(text, min_len=2):
-    if len(text.strip()) < min_len:
-        return None
-    return text
+    return len(text.strip()) >= min_len
+
 
 def filter_small_boxes(box, min_height=10):
     ys = [p[1] for p in box]
     return (max(ys) - min(ys)) >= min_height
 
-def postprocess(text, score, box, normalizer):
-    
-    if filter_by_score(text, score) is None:
-        return None
 
-    text = filter_noise(text)
+def postprocess(lines, normalizer=None):
 
-    if text is None:
-        return None
+    if normalizer is None:
+        normalizer = TextNormalizer()
 
-    clean_text = normalizer.process(text)
+    results = []
 
-    return clean_text
+    for line in lines:
+        text = line["text"]
+        score = line["score"]
+        box = line["box"]
+
+        if not filter_by_score(score):
+            continue
+
+        if not filter_noise(text):
+            continue
+
+        if not filter_small_boxes(box):
+            continue
+
+        clean_text = normalizer.process(text)
+
+        results.append(clean_text)
+
+    return "\n".join(results)
