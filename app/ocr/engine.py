@@ -18,5 +18,19 @@ def run_ocr(ocr, image, preprocess=True):
         img = soft_preprocess(image)
     else:
         img = image
-    
-    return ocr.ocr(image, cls=False)
+        
+    result = ocr.ocr(img, cls=False)
+
+    items = []
+
+    if not result or not result[0]:
+        return items
+
+    for line in result[0]:
+        box = line[0]
+        text = line[1][0]
+        score = line[1][1]
+
+        items.append((box, text, score))
+
+    return items
