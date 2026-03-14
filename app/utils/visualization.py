@@ -70,19 +70,3 @@ class OCRVisualizer:
         cv2.imshow(window_name, final_grid)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-
-    def print_timings(self):
-        """Выводит время каждого сохранённого шага"""
-        if not DEBUG:
-            return
-
-        print("\nOCR Debug Timings:")
-        last_time = None
-        for name, _ in self.steps:
-            t = self.start_times[name]
-            if last_time is None:
-                delta = 0
-            else:
-                delta = t - last_time
-            print(f"{name:<15} {delta:.3f}s")
-            last_time = t
