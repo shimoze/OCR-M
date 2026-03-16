@@ -1,12 +1,12 @@
 import cv2
 
-from ocr.engine import init_ocr, run_ocr
-from ocr.postprocess import postprocess
-from ocr.layout import sort_boxes, group_lines
+from app.ocr.engine import init_ocr, run_ocr
+from app.ocr.postprocess import postprocess
+from app.ocr.layout import sort_boxes, group_lines
 
-from text.normalizer import TextNormalizer
+from app.text.normalizer import TextNormalizer
 
-from utils.paths import RAW_DIR, PROCESSED_DIR
+from app.utils.paths import RAW_DIR, PROCESSED_DIR
 
 # путь к изображению
 img_path = RAW_DIR / "test_image.jpg"

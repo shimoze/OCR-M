@@ -1,14 +1,14 @@
 import cv2
 from datetime import datetime
 
-from utils.visualization import OCRVisualizer
-from utils.paths import DEBUG_DIR, RAW_DIR
-from utils.logger import OCRLogger
+from app.utils.visualization import OCRVisualizer
+from app.utils.paths import DEBUG_DIR, RAW_DIR
+from app.utils.logger import OCRLogger
 
-from ocr.engine import init_ocr, run_ocr
-from ocr.layout import sort_boxes, group_lines
-from ocr.postprocess import postprocess
-from ocr.preprocessing import soft_preprocess
+from app.ocr.engine import init_ocr, run_ocr
+from app.ocr.layout import sort_boxes, group_lines
+from app.ocr.postprocess import postprocess
+from app.ocr.preprocessing import soft_preprocess
 
 """
     Подготовка папки

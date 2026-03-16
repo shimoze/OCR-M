@@ -1,5 +1,5 @@
-from text.normalizer import TextNormalizer
-
+from app.text.normalizer import TextNormalizer
+from app.utils.structures import OCRLine
 
 def filter_by_score(score, min_score=0.6):
     return score >= min_score
@@ -22,9 +22,9 @@ def postprocess(lines, normalizer=None):
     results = []
 
     for line in lines:
-        text = line["text"]
-        score = line["score"]
-        box = line["box"]
+        text = line.text
+        score = line.score
+        box = line.box
 
         if not filter_by_score(score):
             continue

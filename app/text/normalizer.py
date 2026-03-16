@@ -1,6 +1,6 @@
 import re
-from .char_map import LATIN_TO_CYRILLIC
-from .spell_corrector import SpellCorrector
+from app.text.char_map import LATIN_TO_CYRILLIC
+from app.text.spell_corrector import SpellCorrector
 
 class TextNormalizer:
     def __init__(self, dictionary: set[str] | None = None):

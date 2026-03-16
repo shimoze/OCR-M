@@ -1,4 +1,4 @@
-from utils.paths import APP_DIR
+from app.utils.paths import APP_DIR
 
 def load_dictionary(filename):
     path = APP_DIR / "ocr" / "text" / "dictionary" / filename
