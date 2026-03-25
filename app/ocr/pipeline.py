@@ -2,11 +2,14 @@ from app.ocr.preprocessing import soft_preprocess
 from app.ocr.engine import run_ocr
 from app.ocr.postprocess import postprocess
 from app.ocr.layout import sort_boxes, group_lines
+from app.text.normalizer import TextNormalizer
+
 from app.utils.structures import OCRWord
 
 class OCRPipeline:
-    def __init__(self, ocr):
+    def __init__(self, ocr, normalizer=None):
         self.ocr = ocr
+        self.normalizer = normalizer
         
     def preprocess(self, img):
         return soft_preprocess(img)
@@ -31,7 +34,7 @@ class OCRPipeline:
         return group_lines(items)
 
     def postprocess(self, lines):
-        return postprocess(lines)
+        return postprocess(lines, self.normalizer)
 
     def run(self, img):
         img = self.preprocess(img)
