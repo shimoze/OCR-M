@@ -1,3 +1,3 @@
-OCR_LANG= "ru"
-MIN_CONFIDENCE= 0.6
-USE_BINARIZATION = True
+#logger and visualization
+DEBUG = True
+SAVE_STEPS = True

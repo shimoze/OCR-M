@@ -22,21 +22,18 @@ def postprocess(lines, normalizer=None):
     results = []
 
     for line in lines:
-        text = line.text
-        score = line.score
-        box = line.box
 
-        if not filter_by_score(score):
+        if not filter_by_score(line.score):
             continue
 
-        if not filter_noise(text):
+        if not filter_noise(line.text):
             continue
 
-        if not filter_small_boxes(box):
+        if not filter_small_boxes(line.box):
             continue
 
-        clean_text = normalizer.process(text)
+        normalized_line = normalizer.process_line(line)
+        results.append(normalized_line)
 
-        results.append(clean_text)
 
-    return "\n".join(results)
+    return results

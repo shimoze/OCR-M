@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 
 def soft_preprocess(img, clip_limit=2.0, denoise_strength=10):
 

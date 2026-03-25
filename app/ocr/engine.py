@@ -1,7 +1,6 @@
 from paddleocr import PaddleOCR
 
 from app.ocr.preprocessing import soft_preprocess
-from app.utils.structures import OCRLine
 
 def init_ocr(lang='cyrillic', use_orientation=True, show_log=False):
     return PaddleOCR(
@@ -22,22 +21,17 @@ def run_ocr(ocr, image, preprocess=True):
         
     result = ocr.ocr(img, cls=False)
 
-    items = []
 
     if not result or not result[0]:
-        return items
+        return []
 
-    for line in result[0]:
-        box = line[0]
-        text = line[1][0]
-        score = line[1][1]
+    items = []
 
-        items.append(
-            OCRLine(
-                text=text,
-                score=score,
-                box=box,
-            )
-        )
+    for item in result[0]:
+        box = item[0]
+        text = item[1][0]
+        score = item[1][1]
+
+        items.append((box, (text , score)))
 
     return items

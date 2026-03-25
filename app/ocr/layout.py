@@ -1,101 +1,94 @@
 import statistics
+from app.utils.structures import OCRLine, OCRWord
 
-from app.utils.structures import OCRLine
-
-#Измеряем высоту бокса
 def box_height(box):
     ys = [p[1] for p in box]
     return max(ys) - min(ys)
 
-#Средняя высота строки
-def median_text_height(boxes):
-    heights = [box_height(line.box) for line in boxes]
+def median_text_height(words):
+    heights = [box_height(w.box) for w in words]
     return statistics.median(heights)
 
-def sort_boxes(boxes):
-    """
-    boxes: list of (box, text)
-    box: [[x1,y1],[x2,y2],[x3,y3],[x4,y4]]
-    """
-    def box_key(line):
-        y = min(p[1] for p in line.box)
-        x = min(p[0] for p in line.box)
+def sort_boxes(words):
+    def box_key(w):
+        y = min(p[1] for p in w.box)
+        x = min(p[0] for p in w.box)
         return (y, x)
+    return sorted(words, key=box_key)
 
-    return sorted(boxes, key=box_key)
-
-def group_lines(boxes):
-    if not boxes:
+def group_lines(words: list[OCRWord]) -> list[OCRLine]:
+    """
+    Группирует OCRWord в OCRLine
+    """
+    if not words:
         return []
 
-    # Сортируем все боксы сначала по Y (центру), чтобы идти сверху вниз
-    boxes.sort(
-        key=lambda line: (
-            (min(p[1] for p in line.box) + 
-             max(p[1] for p in line.box)
-             ) / 2)
-    )
-    median_h = median_text_height(boxes)
-    y_threshold = int(median_h * 0.5) # Немного уменьшим порог для точности
+    # сортируем по центру Y
+    words.sort(key=lambda w: (min(p[1] for p in w.box) + max(p[1] for p in w.box)) / 2)
+    median_h = median_text_height(words)
+    y_threshold = int(median_h * 0.5)
 
     lines = []
     current_line = []
+    current_y_center = (min(p[1] for p in words[0].box) + max(p[1] for p in words[0].box)) / 2
 
-    first_box = boxes[0].box
-    current_y_center = (min(p[1] for p in first_box) + max(p[1] for p in first_box)) / 2
+    for word in words:
+        word_y_center = (min(p[1] for p in word.box) + max(p[1] for p in word.box)) / 2
 
-    for line in boxes:
-        box_y_center = (min(p[1] for p in line.box) + max(p[1] for p in line.box)) / 2
-
-        if abs(box_y_center - current_y_center) <= y_threshold:
-            current_line.append(line)
+        if abs(word_y_center - current_y_center) <= y_threshold:
+            current_line.append(word)
         else:
-            current_line.sort(key=lambda l: min(p[0] for p in l.box))
+            # сортируем слова по X
+            current_line.sort(key=lambda w: min(p[0] for p in w.box))
 
-            line_text = " ".join(l.text for l in current_line)
-            line_score = sum(l.score for l in current_line) / len(current_line)
-            line_box = [p for l in current_line for p in l.box]
+            line_text = " ".join(w.text for w in current_line)
+            line_score = sum(w.score for w in current_line) / len(current_line)
+            line_box = [p for w in current_line for p in w.box]
 
             lines.append(
                 OCRLine(
                     text=line_text,
                     score=line_score,
-                    box= line_box,
+                    box=line_box,
+                    words=current_line.copy(),  # сохраняем слова в линии
                 )
             )
 
-            current_line = [line]
-            current_y_center = box_y_center
+            current_line = [word]
+            current_y_center = word_y_center
 
+    # последняя линия
     if current_line:
-        current_line.sort(key=lambda l: min(p[0] for p in l.box))
-
-        line_text =" ".join(l.text for l in current_line)
-        line_score = sum(l.score for l in current_line) / len(current_line)
-        line_box = [p for l in current_line for p in l.box]
-        lines.append(OCRLine(
-            text= line_text,
-            score= line_score,
-            box= line_box,
-        ))
+        current_line.sort(key=lambda w: min(p[0] for p in w.box))
+        line_text = " ".join(w.text for w in current_line)
+        line_score = sum(w.score for w in current_line) / len(current_line)
+        line_box = [p for w in current_line for p in w.box]
+        lines.append(
+            OCRLine(
+                text=line_text,
+                score=line_score,
+                box=line_box,
+                words=current_line.copy(),
+            )
+        )
 
     return lines
 
 def group_paragraphs(lines, line_spacing_threshold=20):
     """
-    lines: список строк
-    Возвращает список абзацев
+    lines: List[OCRLine]
+    Возвращает List[str] — текст абзацев
     """
     paragraphs = []
     paragraph = []
 
     for line in lines:
-        if line.strip() == "":
+        if not line.text.strip():
             if paragraph:
                 paragraphs.append(" ".join(paragraph))
                 paragraph = []
         else:
-            paragraph.append(line)
+            paragraph.append(line.text)
     if paragraph:
         paragraphs.append(" ".join(paragraph))
     
