@@ -29,19 +29,18 @@ if img is None:
 
 #   ---инициализация---
 
-
 logger = OCRLogger(run_dir, total_steps=6)
 logger.setup()
-
-viz = OCRVisualizer(steps_dir)
 
 ocr = init_ocr()
 pipeline = OCRPipeline(ocr)
 
+img_original=img
+
 #   ---pipeline с контролем---
 with logger.log_step("preprocess"):
     img = pipeline.preprocess(img)
-    viz.save("preprocessed", img)
+    img_pre=img
 
 with logger.log_step("run ocr"):
     items = pipeline.run_ocr(img)
@@ -59,7 +58,9 @@ with logger.log_step("postprocess"):
     text = pipeline.postprocess(lines)
 
 # --- визуализация bbox (реальная, не фейковая) ---
-viz.save_boxes(img, [word.box for word in words], name="words")
-viz.save_boxes(img, [line.box for line in lines], name="lines")
+
+viz = OCRVisualizer(steps_dir)
+viz.save_pipeline_steps(original=img_original, preprocessed=img_pre, words=words, lines=lines)
+
 
 viz.show_grid(cols=3)
