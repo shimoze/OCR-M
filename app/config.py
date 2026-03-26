@@ -1,3 +1,1 @@
-#logger and visualization
-DEBUG = True
-SAVE_STEPS = True
+USE_GPU= False

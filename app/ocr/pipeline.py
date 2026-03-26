@@ -1,5 +1,5 @@
 from app.ocr.preprocessing import soft_preprocess
-from app.ocr.engine import run_ocr
+from app.ocr import engine
 from app.ocr.postprocess import postprocess
 from app.ocr.layout import sort_boxes, group_lines
 from app.text.normalizer import TextNormalizer
@@ -15,7 +15,7 @@ class OCRPipeline:
         return soft_preprocess(img)
     
     def run_ocr(self, img):
-        return run_ocr(self.ocr, img)
+        return self.ocr.run(img)
     
     def to_words(self, items):
         words = []

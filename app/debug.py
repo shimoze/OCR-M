@@ -5,7 +5,7 @@ from app.utils.visualization import OCRVisualizer
 from app.utils.paths import DEBUG_DIR, RAW_DIR
 from app.utils.logger import OCRLogger
 
-from app.ocr.engine import init_ocr
+from app.ocr import engine
 from app.ocr.pipeline import OCRPipeline
 
 """
@@ -32,8 +32,8 @@ if img is None:
 logger = OCRLogger(run_dir, total_steps=6)
 logger.setup()
 
-ocr = init_ocr()
-pipeline = OCRPipeline(ocr)
+ocr = engine.init_ocr('paddle')
+pipeline = OCRPipeline(ocr=ocr)
 
 img_original=img
 

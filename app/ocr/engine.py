@@ -1,37 +1,57 @@
+from abc import ABC, abstractmethod
 from paddleocr import PaddleOCR
 
+from app.config import USE_GPU
 from app.ocr.preprocessing import soft_preprocess
 
-def init_ocr(lang='cyrillic', use_orientation=True, show_log=False):
-    return PaddleOCR(
-        use_angle_cls = use_orientation,
-        lang=lang,
-        show_log=show_log,
-        rec_batch_num=16,
-        det_db_thresh=0.3,
-        det_db_box_thresh=0.5,
-        use_gpu= False,
-    )
+# --- 1. Базовый интерфейс ---
+class BaseOCREngine(ABC):
+    @abstractmethod
+    def run(self, image, preprocess=True):
+        pass
 
-def run_ocr(ocr, image, preprocess=True):
-    if isinstance(image, str) and preprocess:
-        img = soft_preprocess(image)
-    else:
-        img = image
+# --- 2. PaddleOCR для обычного текста ---
+
+class PaddleEngine(BaseOCREngine):
+    def __init__(self, lang='cyrillic', use_orientation=True, show_log=False):
+        self.engine = PaddleOCR(
+            use_angle_cls=use_orientation,
+            lang=lang,
+            show_log=show_log,
+            rec_batch_num=16,
+            det_db_thresh=0.3,            
+            det_db_box_thresh=0.5,
+            USE_GPU=USE_GPU,
+        )
+
+    def run(self, image, preprocess=True):
+        if isinstance(image, str) and preprocess:
+            img = soft_preprocess(image)
+        else:
+            img = image
         
-    result = ocr.ocr(img, cls=False)
+        result = self.engine.ocr(img, cls=False)
+        if not result or not result[0]:
+            return
 
+        items = []
 
-    if not result or not result[0]:
-        return []
+        for item in result[0]:
+            box = item[0]
+            text = item[1][0]
+            score = item[1][1]
 
-    items = []
+            items.append((box, (text , score)))
 
-    for item in result[0]:
-        box = item[0]
-        text = item[1][0]
-        score = item[1][1]
-
-        items.append((box, (text , score)))
-
-    return items
+        return items
+    
+def init_ocr(engine_type='paddle', **kwargs):
+    engines = {
+        'paddle':PaddleEngine,
+        #'paddle-vl':PaddleVLEngine,
+    }
+    engine_cls = engines.get(engine_type.lower())
+    if not engine_cls:
+        raise ValueError(f"Unknown OCR engine: {engine_type}")
+    
+    return engine_cls(**kwargs)
