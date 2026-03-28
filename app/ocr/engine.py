@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from paddleocr import PaddleOCR
 
-from app.config import USE_GPU
+from app.config import USE_GPU, det_model_dir, rec_model_dir
 from app.ocr.preprocessing import soft_preprocess
 
 # --- 1. Базовый интерфейс ---
@@ -13,15 +13,16 @@ class BaseOCREngine(ABC):
 # --- 2. PaddleOCR для обычного текста ---
 
 class PaddleEngine(BaseOCREngine):
-    def __init__(self, lang='cyrillic', use_orientation=True, show_log=False):
+    def __init__(self, use_orientation=True, show_log=False):
         self.engine = PaddleOCR(
+            det_model_dir=det_model_dir,
+            rec_model_dir=rec_model_dir,
             use_angle_cls=use_orientation,
-            lang=lang,
             show_log=show_log,
             rec_batch_num=16,
             det_db_thresh=0.3,            
             det_db_box_thresh=0.5,
-            USE_GPU=USE_GPU,
+            use_gpu=USE_GPU,
         )
 
     def run(self, image, preprocess=True):

@@ -3,6 +3,11 @@ __pycache__/
 *.pyc
 data/*
 debug/*
+models/paddleocr/ocr/*
+models/paddleocr/vl/*
+
 
 !data/.gitkeep
 !debug/.gitkeep
+!models/paddleocr/ocr/.gitkeep
+!models/paddleocr/vl/.gitkeep
