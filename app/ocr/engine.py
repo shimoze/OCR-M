@@ -17,6 +17,7 @@ class PaddleEngine(BaseOCREngine):
         self.engine = PaddleOCR(
             det_model_dir=det_model_dir,
             rec_model_dir=rec_model_dir,
+            lang="ru",
             use_angle_cls=use_orientation,
             show_log=show_log,
             rec_batch_num=16,
