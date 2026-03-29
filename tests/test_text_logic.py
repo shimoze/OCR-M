@@ -14,10 +14,7 @@ def test_text_normalizer():
     normalizer = TextNormalizer()
     raw_text = normalizer.process_line(raw_text)
     
-    if(raw_text == excepted):
-        print("Test SUCCESS")
-    else:
-        print("Test FAILED")
+    assert raw_text.text == excepted
 
 def test_spell_corrector():
     bad_text = "Договор купли-прадажи"
@@ -25,14 +22,11 @@ def test_spell_corrector():
 
     dict_path = TEST_DIR / "test_dictionary" / "russian_test.txt"
 
-    with open(dict_path, 'r', encoding='ANSI') as f:
+    with open(dict_path, 'r', encoding='UTF-8') as f:
         words = set(f.read().splitlines())
 
     spell = SpellCorrector(words)
     result = spell.correct_word(bad_text)
 
 
-    if right_word in result.lower():
-        print("TEST SUCCESS")
-    else:
-        print("TEST FAILED")
+    assert right_word in result.lower()

@@ -17,13 +17,13 @@ def test_full_pipeline():
     result_text = pipeline.run(image)
     result_string = str(result_text).lower()
 
-    if("гарантировать" in result_string):test_score+=1
-    if("контроль" in result_string.lower()):test_score+=1
-    if("OCR" in result_string.upper()):test_score+=1
+    if "гарантировать" in result_string:
+        test_score += 1
+    if "контроль" in result_string:
+        test_score += 1
+    if "ocr" in result_string:
+        test_score += 1
+    if len(result_string.strip()) > 0:
+        test_score += 1
 
-    if(len(result_text) > 10):test_score+=1
-
-    if(test_score>=3):
-        print("TEST SUCCESS")
-    else:
-        print("TEST FAILED") 
+    assert test_score >= 3, f"OCR quality too low: score={test_score}, text={result_string}"

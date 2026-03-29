@@ -26,7 +26,7 @@ class SpellCorrector:
             return word
 
         # 3. Исправление через SymSpell
-        suggestions = self.spell.lookup(word_lower, Verbosity.CLOSEST, max_edit_distance=2)
+        suggestions = self.spell.lookup_compound(word_lower, max_edit_distance=2)
 
         if suggestions:
             # Возвращаем первый лучший вариант, сохраняя регистр исходного слова
@@ -34,5 +34,5 @@ class SpellCorrector:
             if word[0].isupper():
                 corrected = corrected.capitalize()
             return corrected
-        else:
-            return word
+        
+        return word
