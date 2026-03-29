@@ -10,4 +10,6 @@ PROCESSED_DIR = DATA_DIR / "output"
 DEBUG_DIR = BASE_DIR / "debug"
 
 OCR_DIR = APP_DIR / "ocr"
-DICT_DIR = OCR_DIR / "text" / "dictionary"
+DICT_DIR = BASE_DIR / "assets" / "dictionary"
+
+TEST_DIR = BASE_DIR / "tests"
