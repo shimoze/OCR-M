@@ -1,6 +1,6 @@
 import cv2
 
-from app.ocr.engine import init_ocr
+from app.ocr import engine
 from app.ocr.pipeline import OCRPipeline
 from app.ocr.postprocess import postprocess
 from app.ocr.layout import sort_boxes, group_lines
@@ -18,8 +18,8 @@ if not img_path.exists():
 
 img = cv2.imread(str(img_path))
 
-ocr = init_ocr()
-pipeline = OCRPipeline(ocr)
+ocr = engine.init_ocr('paddle')
+pipeline = OCRPipeline(ocr=ocr)
 
 text = pipeline.run(img)
 
