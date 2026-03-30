@@ -79,23 +79,11 @@ python app/main.py
 **Запуск отладки:**
 ```bash
 python -m app.debug
+```
+Результаты работы сохраняются в директории debug/.
 
-Результаты храняться в директории debug
-
-Пример(Visualization):
-Пример(Логгер):
-Примеры работы:
-<details>
-<summary>📸 Посмотреть пример визуализации (Detection & Layout)</summary>
-<p align="center">
-<img src="docs/images/003_words.png" alt="Visualization Example" width="800">
-<br>
-<i>На изображении: результат работы детектора DBNet с отрисованными полигонами.</i>
-</p>
-</details>
-<details>
-<summary>📜 Посмотреть пример логов (Performance Tracking)</summary>
-code
+📸![Пример(Visualization)](docs/images/003_words.png)
+📃Пример(Логгер):
 Text
 [1/6] preprocess .......... 231 ms
 [2/6] run ocr ............. 4365 ms
@@ -104,7 +92,7 @@ Text
 [5/6] group lines ......... 3 ms
 [6/6] postprocess ......... 1 ms
 </details>
-```
+
 
 
 
