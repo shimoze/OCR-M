@@ -82,16 +82,16 @@ python -m app.debug
 ```
 Результаты работы сохраняются в директории debug/.
 
-📸![Пример(Visualization)](docs/images/003_words.png)
-📃Пример(Логгер):
-Text
-[1/6] preprocess .......... 231 ms
-[2/6] run ocr ............. 4365 ms
-[3/6] to words ............ 0 ms
-[4/6] sort boxes .......... 0 ms
-[5/6] group lines ......... 3 ms
-[6/6] postprocess ......... 1 ms
-</details>
+### 📸Пример(Visualization)
+![Пример(Visualization)](docs/images/003_words.png)
+### 📃Пример(Логгер):
+- [1/6] preprocess .......... 231 ms
+- [2/6] run ocr ............. 4365 ms
+- [3/6] to words ............ 0 ms
+- [4/6] sort boxes .......... 0 ms
+- [5/6] group lines ......... 3 ms
+- [6/6] postprocess ......... 1 ms
+
 
 
 
