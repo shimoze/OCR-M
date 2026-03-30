@@ -69,6 +69,44 @@ docker run --rm \
 pip install -r requirements.txt
 python app/main.py
 ```
+---
+---
+
+## 🧬 Диагностика и Визуализация (Debug Mode)
+
+В проекте реализован модуль для глубокого анализа работы пайплайна. Он позволяет визуализировать детекцию текста, проверить точность распознавания и замерить время обработки каждого этапа.
+
+**Запуск отладки:**
+```bash
+python -m app.debug
+
+Результаты храняться в директории debug
+
+Пример(Visualization):
+Пример(Логгер):
+Примеры работы:
+<details>
+<summary>📸 Посмотреть пример визуализации (Detection & Layout)</summary>
+<p align="center">
+<img src="docs/images/003_words.png" alt="Visualization Example" width="800">
+<br>
+<i>На изображении: результат работы детектора DBNet с отрисованными полигонами.</i>
+</p>
+</details>
+<details>
+<summary>📜 Посмотреть пример логов (Performance Tracking)</summary>
+code
+Text
+[1/6] preprocess .......... 231 ms
+[2/6] run ocr ............. 4365 ms
+[3/6] to words ............ 0 ms
+[4/6] sort boxes .......... 0 ms
+[5/6] group lines ......... 3 ms
+[6/6] postprocess ......... 1 ms
+</details>
+```
+
+
 
 ---
 
@@ -99,5 +137,7 @@ Distributed under the MIT License. См. `LICENSE` для подробносте
 
 ---
 **Разработчик:** Shimoze 
-**Контакты:** Telegram: @HalalSapiens
-```
+
+**Контакты:** 
+Telegram: @HalalSapiens
+
