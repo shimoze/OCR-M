@@ -5,7 +5,7 @@ data/*
 debug/*
 models/paddleocr/ocr/*
 models/paddleocr/vl/*
-
+/.pytest_cache/
 
 !data/.gitkeep
 !debug/.gitkeep

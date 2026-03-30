@@ -1,0 +1,28 @@
+# Python мусор
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Тесты (в продакшн-образе они не нужны)
+tests/
+.pytest_cache
+
+# Данные и логи (игнорируем контент, чтобы не тащить гигабайты тестов)
+data/input/*
+data/output/*
+debug/*
+
+# Служебные файлы Git
+.git
+.gitignore
+.gitattributes
+
+# Проектный мусор
+README.md
+Makefile
+scripts/           # Скрипты для скачивания (в докере не нужны)
+
+# Если вы используете только v4, можно сэкономить место:
+# models/paddleocr/ocr/v5/
