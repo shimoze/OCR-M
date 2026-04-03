@@ -24,4 +24,4 @@ COPY . .
 
 RUN mkdir -p data/output debug
 
-CMD ["python", "app/main.py"]
+CMD ["python", "-m" , "app.main"]

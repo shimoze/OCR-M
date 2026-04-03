@@ -13,3 +13,5 @@ OCR_DIR = APP_DIR / "ocr"
 DICT_DIR = BASE_DIR / "assets" / "dictionary"
 
 TEST_DIR = BASE_DIR / "tests"
+
+MODELS_OCR = BASE_DIR / "models" / "paddleocr" / "ocr"

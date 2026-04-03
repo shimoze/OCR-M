@@ -5,8 +5,8 @@ build:
 # Запуск обработки данных
 run:
 	docker run --rm \
-		-v $(shell pwd)/data/input:/app/data/input \
-		-v $(shell pwd)/data/output:/app/data/output \
+		-v $(CURDIR)/data/input:/app/data/input \
+		-v $(CURDIR)/data/output:/app/data/output \
 		ocr_module
 
 # Зайти внутрь контейнера
