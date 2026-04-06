@@ -6,3 +6,4 @@ USE_GPU= False
 
 det_model_dir= str(MODELS_OCR / "v4" / "det" / "mobile")
 rec_model_dir= str(MODELS_OCR / "v4" / "rec" / "mobile" / "ru")
+cls_model_dir = str(MODELS_OCR / "cls")

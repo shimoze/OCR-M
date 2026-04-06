@@ -2,7 +2,7 @@ import os
 import sys
 from paddleocr import PaddleOCR
 
-from app.utils.paths import BASE_DIR
+from app.utils.paths import BASE_DIR, MODELS_OCR
 from scripts.model_config import MODELS_CONFIG
 
 
@@ -31,6 +31,7 @@ def build_paths(cfg, lang):
     return {
         "det_dir": f"{base}/{version}/det/{model_type}",
         "rec_dir": f"{base}/{version}/rec/{model_type}/{lang}",
+        "cls_dir": f"{base}/cls",
     }
 
 def create_ocr(cfg):
@@ -41,11 +42,29 @@ def create_ocr(cfg):
         lang=resolved["rec_lang"],   # ключевой момент
         det_model_dir=paths["det_dir"],
         rec_model_dir=paths["rec_dir"],
+        cls_model_dir=paths["cls_dir"],
+        use_angle_cls=True,
         use_gpu=False,
         show_log= False,
     )
 
     return ocr
+
+def download_cls():
+    cls_path = MODELS_OCR / "cls"
+
+    if (cls_path / "inference.pdmodel").exists():
+        print("CLS уже скачан")
+        return
+    
+    print("DOWNLOADING CLS...")
+
+    PaddleOCR(
+        use_angle_cls=True,
+        cls_model_dir=str(cls_path),
+        use_gpu=False,
+        show_log=False,
+    )
 
 
 def process_single_config(ver, t, l):
@@ -67,7 +86,8 @@ def process_single_config(ver, t, l):
         print(f"ERROR: Не удалось загрузить {l}: {e}")
 
 def main():
-    
+
+    download_cls()    
     if len(sys.argv) < 2:
         print("Использования: python -m scripts.download_models <version> <type> <language>")
         return
