@@ -102,7 +102,7 @@ python -m app.debug
 
 
 ---
-###Streamlit UI🔍
+### Streamlit UI🔍
 Интерактивная панель для калибровки параметров распознавания в реальном времени.
 ```bash
 python -m streamlit run app/app_ui.py
