@@ -63,6 +63,18 @@ class OCRVisualizer:
         if blocks is not None:
             self.save_boxes(preprocessed if preprocessed is not None else original, blocks, name="blocks", color=(0, 0, 255))
 
+    def draw_onto_image(self, image, items, color=(0, 255, 0), thickness=2):
+        """Просто рисует боксы на копии изображения и возвращает её"""
+        img_copy = image.copy()
+        for item in items:
+            box = getattr(item, "box", None)
+            if box is None: continue
+            pts = np.array(box, np.int32).reshape((-1, 1, 2))
+            cv2.polylines(img_copy, [pts], isClosed=True, color=color, thickness=thickness)
+        return img_copy
+
+
+
     def show_grid(self, cols=3, window_name="OCR Debug Grid"):
         """Показывает grid из всех сохранённых этапов"""
         if not DEBUG or len(self.steps) == 0:

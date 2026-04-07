@@ -48,7 +48,7 @@
 ### 1. Подготовка моделей
 Поскольку веса моделей весят >100Мб, они не хранятся в Git. Скачайте их с помощью скрипта:
 ```bash
-python scripts/download_models.py
+python scripts/download_models.py v4 mobile ru
 ```
 
 ### 2. Запуск через Docker (Рекомендуется)
@@ -69,10 +69,19 @@ docker run --rm \
 pip install -r requirements.txt
 python app/main.py
 ```
+
+Или проще с помощью MAKE
+```bash
+#Собираем образ
+make build
+#Запуск
+make run
+```
+
 ---
 ---
 
-## 🧬 Диагностика и Визуализация (Debug Mode)
+### 🧬 Диагностика и Визуализация (Debug Mode)
 
 В проекте реализован модуль для глубокого анализа работы пайплайна. Он позволяет визуализировать детекцию текста, проверить точность распознавания и замерить время обработки каждого этапа.
 
@@ -93,9 +102,19 @@ python -m app.debug
 - [6/6] postprocess ......... 1 ms
 
 
+---
+Streamlit UI🔍
+Интерактивная панель для калибровки параметров распознавания в реальном времени.
+```bash
+python -m streamlit run app/app_ui.py
+```
+![Главная страница](docs/images/006_main_page.png)
 
+![Вывод в виде JSON](docs/images/005_images_ui.png)
 
+---
 
+---
 ---
 
 ## 🧪 Тестирование
@@ -127,5 +146,5 @@ Distributed under the MIT License. См. `LICENSE` для подробносте
 **Разработчик:** Shimoze 
 
 **Контакты:** 
-Telegram: @HalalSapiens
+Telegram: [@HalalSapiens](https://t.me/HalalSapiens)
 

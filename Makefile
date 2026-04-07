@@ -2,11 +2,10 @@
 build:
 	docker build -t ocr_module .
 
-# Запуск обработки данных
-run:
-	docker run --rm \
-		-v $(CURDIR)/data/input:/app/data/input \
-		-v $(CURDIR)/data/output:/app/data/output \
+# Запуск UI версии
+run-ui:
+	docker run --rm -p 8501:8501 \
+		-v $(CURDIR)/models:/app/models \
 		ocr_module
 
 # Зайти внутрь контейнера

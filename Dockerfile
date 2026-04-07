@@ -24,4 +24,6 @@ COPY . .
 
 RUN mkdir -p data/output debug
 
-CMD ["python", "-m" , "app.main"]
+EXPOSE 8501
+
+CMD ["python", "-m" , "streamlit", "run" , "app/app_ui.py"]
