@@ -79,7 +79,6 @@ make run
 ```
 
 ---
----
 
 ### 🧬 Диагностика и Визуализация (Debug Mode)
 
@@ -103,7 +102,7 @@ python -m app.debug
 
 
 ---
-Streamlit UI🔍
+###Streamlit UI🔍
 Интерактивная панель для калибровки параметров распознавания в реальном времени.
 ```bash
 python -m streamlit run app/app_ui.py
@@ -112,9 +111,7 @@ python -m streamlit run app/app_ui.py
 
 ![Вывод в виде JSON](docs/images/005_images_ui.png)
 
----
 
----
 ---
 
 ## 🧪 Тестирование
